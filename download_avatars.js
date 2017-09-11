@@ -1,11 +1,17 @@
 var request = require('request');
 
+var GITHUB_USER = "jasper-lyn";
+var GITHUB_TOKEN = "27cdb87f34426cd0a3035d869c38f4f9a02e9ea1";
+
 console.log('Welcome to the Github Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
+  // create valid url
+  var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
+
   // fetch the list of contributors via HTTPS
   var options = {
-    url: 'https://api.github.com/repos/jquery/jquery/contributors',
+    url: requestURL,
     method: 'get',
     headers: {
       'User-Agent': 'request'
