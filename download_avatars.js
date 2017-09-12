@@ -18,7 +18,8 @@ function getRepoContributors(repoOwner, repoName, cb) {
     }
   };
 
-  function callback(error, response, body) {
+  // defining callback function
+  function callbackForRequestModule(error, response, body) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
       // cb is the callback passed in; and it takes in 2 arguments
@@ -29,13 +30,21 @@ function getRepoContributors(repoOwner, repoName, cb) {
   }
 
   // HTTPS request to GitHub
-  request(options, callback);
+  request(options, callbackForRequestModule);
 };
 
+var cbInsideOfGetRepoContributors = function(err, contributors) {
+  console.log("Errors:", err);
+  console.log("Contributors:", contributors);
+  avatarURLs = [];
+  for (i = 0; i < contributors.length; i++) {
+    avatarURLs.push(contributors[i].avatar_url);
+  }
+  console.log(avatarURLs);
+};
 
 // takes in 3 arguments; first 2 arguments are to build the URL
 // third argument is for getting contributors from github API
-getRepoContributors("jquery", "jquery", function(err, contributors) {
-  console.log("Errors:", err);
-  console.log("Contributors:", contributors);
-});
+getRepoContributors("jquery", "jquery", cbInsideOfGetRepoContributors);
+
+
