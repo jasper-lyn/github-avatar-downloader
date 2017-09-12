@@ -1,4 +1,5 @@
 var request = require('request');
+var fs = require('fs');
 
 var GITHUB_USER = "jasper-lyn";
 var GITHUB_TOKEN = "27cdb87f34426cd0a3035d869c38f4f9a02e9ea1";
@@ -36,15 +37,25 @@ function getRepoContributors(repoOwner, repoName, cb) {
 var cbInsideOfGetRepoContributors = function(err, contributors) {
   console.log("Errors:", err);
   console.log("Contributors:", contributors);
-  avatarURLs = [];
+  var avatarURLs = [];
   for (i = 0; i < contributors.length; i++) {
     avatarURLs.push(contributors[i].avatar_url);
+    downloadImageByURL(contributors[i].avatar_url, 'avatars/' + contributors[i].login + '.jpg')
   }
-  console.log(avatarURLs);
 };
 
 // takes in 3 arguments; first 2 arguments are to build the URL
 // third argument is for getting contributors from github API
 getRepoContributors("jquery", "jquery", cbInsideOfGetRepoContributors);
+
+
+function downloadImageByURL(url, filePath) {
+  // The function will make a request to a given url, saving the resulting image file to a specified filePath.
+  request.get(url)
+         .pipe(fs.createWriteStream(filePath));
+}
+
+
+
 
 
